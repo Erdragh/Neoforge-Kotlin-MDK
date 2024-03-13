@@ -6,7 +6,7 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    id("net.neoforged.gradle.userdev") version "7.0.80"
+    id("net.neoforged.gradle.userdev") version "7.0.97"
     // Kotlin Dependencies
     kotlin("jvm") version "1.9.22"
     // OPTIONAL:

@@ -9,24 +9,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1000
+          fetch-depth: 0
           fetch-tags: true
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Gradle and generate dependency Graph
-        if: ${{github.ref == 'refs/heads/main' && github.event_name != 'pull_request'}}
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build
-          dependency-graph: 'generate-and-submit'
-
       - name: Build with Gradle
-        if: ${{github.ref != 'refs/heads/main' || github.event_name == 'pull_request'}}
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: build
+
+      - name: Submit dependencies
+        if: ${{github.ref == 'refs/heads/main' && github.event_name != 'pull_request'}}
+        uses: gradle/actions/dependency-submission@v3
