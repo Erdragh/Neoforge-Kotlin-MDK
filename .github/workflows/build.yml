@@ -23,6 +23,15 @@ jobs:
         with:
           arguments: build
 
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
       - name: Submit dependencies
         if: ${{github.ref == 'refs/heads/main' && github.event_name != 'pull_request'}}
         uses: gradle/actions/dependency-submission@v3
