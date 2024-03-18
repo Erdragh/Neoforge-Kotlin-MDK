@@ -58,12 +58,12 @@ runs {
         modSource(project.sourceSets.getByName("main"))
     }
 
-    create("client") {
+    register("client") {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty("forge.enabledGameTestNamespaces", mod_id)
     }
 
-    create("server") {
+    register("server") {
         systemProperty("forge.enabledGameTestNamespaces", mod_id)
         programArgument("--nogui")
     }
@@ -71,11 +71,11 @@ runs {
     // This run config launches GameTestServer and runs all registered gametests, then exits.
     // By default, the server will crash when no gametests are provided.
     // The gametest system is also enabled by default for other run configs under the /test command.
-    create("gameTestServer") {
+    register("gameTestServer") {
         systemProperty("forge.enabledGameTestNamespaces", mod_id)
     }
 
-    create("data") {
+    register("data") {
         // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
         // workingDirectory project.file("run-data")
 
