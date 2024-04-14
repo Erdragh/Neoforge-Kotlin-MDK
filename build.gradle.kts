@@ -143,7 +143,6 @@ tasks.withType<ProcessResources>().configureEach {
 
     filesMatching("META-INF/mods.toml") {
         expand(loadedProperties)
-        expand(mutableMapOf("project" to project))
     }
 }
 
@@ -161,4 +160,12 @@ publishing {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8" // Use the UTF-8 charset for Java compilation
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
