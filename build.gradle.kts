@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.utils.extendsFrom
 import java.util.Properties
 
 plugins {
@@ -6,7 +7,7 @@ plugins {
     id("eclipse")
     id("idea")
     id("maven-publish")
-    id("net.neoforged.gradle.userdev") version "7.0.97"
+    id("net.neoforged.gradle.userdev") version "7.0.109"
     // Kotlin Dependencies
     kotlin("jvm") version "1.9.22"
     // OPTIONAL:
@@ -32,8 +33,8 @@ base {
     archivesName.set(mod_id)
 }
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 
 //minecraft.accessTransformers.file rootProject.file("src/main/resources/META-INF/accesstransformer.cfg")
 //minecraft.accessTransformers.entry public net.minecraft.client.Minecraft textureManager # textureManager
@@ -91,6 +92,14 @@ sourceSets {
     }
 }
 
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
+configurations {
+    register("localRuntime")
+    runtimeClasspath.extendsFrom(named("localRuntime"))
+}
 
 dependencies {
     val neo_version: String by project
@@ -106,12 +115,13 @@ dependencies {
     val kff_version: String by project
     implementation("thedarkcolour:kotlinforforge-neoforge:$kff_version")
 
-    // Example mod dependency with JEI
+    // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // val jei_vesion: String by project
     // compileOnly("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    // compileOnly("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    // runtimeOnly("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    // compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
+    // "localRuntime"("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${minecraft_version}-${coolmod_version}.jar
@@ -141,7 +151,7 @@ tasks.withType<ProcessResources>().configureEach {
 
     inputs.properties(loadedProperties)
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand(loadedProperties)
     }
 }

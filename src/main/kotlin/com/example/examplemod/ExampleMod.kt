@@ -18,9 +18,9 @@ import net.minecraft.world.level.material.MapColor
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.SubscribeEvent
-import net.neoforged.fml.ModLoadingContext
+import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
-import net.neoforged.fml.common.Mod.EventBusSubscriber
+import net.neoforged.fml.common.EventBusSubscriber
 import net.neoforged.fml.config.ModConfig
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
@@ -32,9 +32,9 @@ import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredItem
 import net.neoforged.neoforge.registries.DeferredRegister
 
-// The value here should match an entry in the META-INF/mods.toml file
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(ExampleMod.MODID)
-class ExampleMod(modEventBus: IEventBus) {
+class ExampleMod(modEventBus: IEventBus, modContainer: ModContainer) {
     companion object {
         // Define mod id in a common place for everything to reference
         const val MODID = "examplemod"
@@ -65,7 +65,7 @@ class ExampleMod(modEventBus: IEventBus) {
         val EXAMPLE_ITEM: DeferredItem<Item> = ITEMS.registerSimpleItem(
             "example_item", Item.Properties().food(
                 FoodProperties.Builder()
-                    .alwaysEat().nutrition(1).saturationMod(2f).build()
+                    .alwaysEdible().nutrition(1).saturationModifier(2f).build()
             )
         )
 
@@ -104,7 +104,7 @@ class ExampleMod(modEventBus: IEventBus) {
         CREATIVE_MODE_TABS.register(modEventBus)
         NeoForge.EVENT_BUS.register(this)
         modEventBus.addListener(this::addCreative)
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC)
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC)
     }
 
     private fun commonSetup(event: FMLCommonSetupEvent) {
