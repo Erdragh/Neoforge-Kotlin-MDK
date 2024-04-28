@@ -25,6 +25,7 @@ jobs:
 
   dependencies:
     runs-on: ubuntu-latest
+    if: ${{github.ref == 'refs/heads/main' && github.event_name != 'pull_request'}}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,5 +34,4 @@ jobs:
           fetch-tags: true
 
       - name: Submit dependencies
-        if: ${{github.ref == 'refs/heads/main' && github.event_name != 'pull_request'}}
         uses: gradle/actions/dependency-submission@v3
