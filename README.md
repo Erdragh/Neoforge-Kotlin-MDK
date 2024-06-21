@@ -1,6 +1,7 @@
 # Kotlin MDK
 
-This is a repo that takes NeoForge's MDKs and ports them to Kotlin. NeoForge has a dedicated GitHub organization for the MDKs, this Kotlin fork does not yet have this.
+This is a repo that takes NeoForge's MDKs and ports them to Kotlin. NeoForge has a dedicated GitHub organization for the MDKs,
+which is linked in the original README below. The mirrors of the Kotlin versions are available [here](https://github.com/NeoForgeKotlinMDKs).
 
 ---
 
